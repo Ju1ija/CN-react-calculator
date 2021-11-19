@@ -5,8 +5,15 @@ import './App.css';
 function App() {
   const [input, setInput] = useState("");
   const [isResultSet, setResultState] = useState(false);
+  const buttons = ["0", ".", "DEL", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-  const inputHandler = (char) => setValidatedInput(input + char);
+  const inputHandler = (char) => {
+    if (char === "DEL") {
+      deleteHandler(input);
+    } else {
+      setValidatedInput(input + char);
+    }
+  }
 
   const setValidatedInput = (val) => {
     const regex = /(\d+[%]?[+-/*]?)+$/;
@@ -55,18 +62,9 @@ function App() {
             <Button icon="%" onClickEvent={() => inputHandler("%")} />
           </div>
           <div className="white-section">
-            <Button icon="0" onClickEvent={() => inputHandler("0")} />
-            <Button icon="." onClickEvent={() => inputHandler(".")} />
-            <Button icon="DEL" onClickEvent={() => deleteHandler(input)} />
-            <Button icon="1" onClickEvent={() => inputHandler("1")} />
-            <Button icon="2" onClickEvent={() => inputHandler("2")} />
-            <Button icon="3" onClickEvent={() => inputHandler("3")} />
-            <Button icon="4" onClickEvent={() => inputHandler("4")} />
-            <Button icon="5" onClickEvent={() => inputHandler("5")} />
-            <Button icon="6" onClickEvent={() => inputHandler("6")} />
-            <Button icon="7" onClickEvent={() => inputHandler("7")} />
-            <Button icon="8" onClickEvent={() => inputHandler("8")} />
-            <Button icon="9" onClickEvent={() => inputHandler("9")} />
+            {buttons.map((icon) => {
+              return <Button icon={icon} onClickEvent={() => inputHandler(icon)} />
+            })}
           </div>
         </div>
         <div className="orange-section">
