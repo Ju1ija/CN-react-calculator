@@ -4,34 +4,49 @@ import './App.css';
 
 function App() {
   const [input, setInput] = useState("");
-  let currentInputField = input;
-  const changeHandler = (event) => {
-    setInput(event.target.value);
+  const [isResultSet, setResultState] = useState(false);
+
+  const inputHandler = (char) => setValidatedInput(input + char);
+
+  const setValidatedInput = (val) => {
+    const regex = /(\d+[%]?[+-/*]?)+$/;
+    const isInputValid = regex.test(val);
+    if (isInputValid) {
+      if (!isResultSet) {
+        setInput(val);
+      } else if (isMathOp(lastCharOf(val))) {
+        setInput(val);
+        setResultState(false);
+      } else {
+        setInput(lastCharOf(val));
+        setResultState(false);
+      }
+    }
   }
-  const inputHandler = (e) => {
-    let currentElement = e;
-    currentInputField += currentElement;
-    setInput(currentInputField);
+
+  const resultHandler = (val) => {
+    if (!isMathOp(lastCharOf(val)) && val !== "") {
+      const result = Number(evaluate(val).toFixed(3));
+      setInput(result);
+      setResultState(true);
+    }
   }
-  const resultHandler = (input) => {
-    const currentInput = input;
-    const result = Number(evaluate(currentInput).toFixed(3));
-    setInput(result);
-  }
-  const deleteHandler = (input) => {
-    if (typeof input === "string") {
-      let inputField = input;
-      inputField = inputField.slice(0, -1);
-      setInput(inputField);
+
+  const deleteHandler = (val) => {
+    if (typeof val === "string") {
+      setInput(val.slice(0, -1));
     } else {
       setInput("");
     }
   }
 
+  const isMathOp = (char) => "+-*/".includes(char);
+  const lastCharOf = (str) => str[str.length - 1];
+
   return (
     <div className="calculator">
       <div className="input-section">
-        <input type="text" onChange={changeHandler} placeholder="0" autocomplete="off" value={input} />
+        <input type="text" onChange={(e) => setValidatedInput(e.target.value)} placeholder="0" autocomplete="off" value={input} />
       </div>
       <div className="buttons-section">
         <div className="numbers-section">
@@ -58,8 +73,8 @@ function App() {
           <Button icon="=" idName="equal" onClickEvent={() => resultHandler(input)} />
           <Button icon="+" onClickEvent={() => inputHandler("+")} />
           <Button icon="-" onClickEvent={() => inputHandler("-")} />
-          <Button icon="x" onClickEvent={() => inputHandler("*")} />
-          <Button icon="/" onClickEvent={() => inputHandler("/")} />
+          <Button icon="&#215;" onClickEvent={() => inputHandler("*")} />
+          <Button icon="&#247;" onClickEvent={() => inputHandler("/")} />
         </div>
       </div>
     </div>
