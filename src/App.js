@@ -14,7 +14,7 @@ function App() {
     if (isInputValid) {
       if (!isResultSet) {
         setInput(val);
-      } else if (isMathOp(lastCharOf(val))) {
+      } else if (isMathOp(lastCharOf(val)) || lastCharOf(val) == "%") {
         setInput(val);
         setResultState(false);
       } else {
