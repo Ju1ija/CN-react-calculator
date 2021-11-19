@@ -49,7 +49,7 @@ function App() {
         <input type="text" onChange={(e) => setValidatedInput(e.target.value)} placeholder="0" autocomplete="off" value={input} />
       </div>
       <div className="buttons-section">
-        <div className="numbers-section">
+        <div>
           <div className="grey-section">
             <Button icon="C" idName="reset-button" onClickEvent={() => setInput("")} />
             <Button icon="%" onClickEvent={() => inputHandler("%")} />
